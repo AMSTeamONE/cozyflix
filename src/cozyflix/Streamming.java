@@ -6,9 +6,17 @@ import java.util.Iterator;
 public class Streamming {
 	private ArrayList<Task> tasks;
 	private int allowedScreens;
+	private String email, password;
 	
-	public Streamming(int allowedScreens) {
+	public void authenticate(String email, String password) {
+		if (!this.email.equals(email) || !this.password.equals(password))
+			throw new AuthenticationException(email, password);
+	}
+	
+	public Streamming(int allowedScreens, String email, String password) {
 		this.allowedScreens = allowedScreens;
+		this.email = email;
+		this.password = password;
 		this.tasks = new ArrayList<Task>();
 	}
 
@@ -32,6 +40,8 @@ public class Streamming {
 	}
 	
 	public void start() throws InterruptedException {
+		long start = System.currentTimeMillis();
+		
 		Task next = getNextTask();
 		while (next != null) {
 			Thread t = new Thread(next);
@@ -39,5 +49,8 @@ public class Streamming {
 			t.join();
 			next = getNextTask();
 		}
+		
+		long delta = System.currentTimeMillis() - start;
+		System.out.printf("Total time: %fh\n", (float) delta / 1000);
 	}
 }

@@ -32,7 +32,7 @@ public class WatchTask extends Task {
 			System.out.printf("Watching %s for %d minutes\n", this.mediaName, this.duration / 60);
 
 			try {
-				Thread.sleep(this.duration / 60);
+				Thread.sleep(this.duration);
 			} catch (InterruptedException e) {
 				System.err.println("The internet went out");
 			}
@@ -52,7 +52,7 @@ public class WatchTask extends Task {
 				}
 			} else {
 				System.out.printf("Watch %s episode %d for %d minutes\n", this.mediaName, 1,
-						Math.round(this.duration / 360));
+						Math.round(this.duration / 60));
 				try {
 					Thread.sleep(duration);
 				} catch (InterruptedException e) {
@@ -60,12 +60,6 @@ public class WatchTask extends Task {
 				}
 			}
 		}
-		}
-
-		try {
-			Thread.sleep(this.duration / 360);
-		} catch (InterruptedException e) {
-			System.out.println("The internet went out. Streamming was cancelled");
 		}
 	}
 
