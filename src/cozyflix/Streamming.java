@@ -1,23 +1,23 @@
 package cozyflix;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class Streamming {
 	private ArrayList<Task> tasks;
-	private int allowedScreens;
+	private ArrayList<String> history;
 	private String email, password;
+	private long executionTime;
 	
 	public void authenticate(String email, String password) {
 		if (!this.email.equals(email) || !this.password.equals(password))
 			throw new AuthenticationException(email, password);
 	}
 	
-	public Streamming(int allowedScreens, String email, String password) {
-		this.allowedScreens = allowedScreens;
+	public Streamming(String email, String password) {
 		this.email = email;
 		this.password = password;
 		this.tasks = new ArrayList<Task>();
+		this.history = new ArrayList<String>();
 	}
 
 	public void addTask(Task task) {
@@ -40,17 +40,33 @@ public class Streamming {
 	}
 	
 	public void start() throws InterruptedException {
-		long start = System.currentTimeMillis();
-		
 		Task next = getNextTask();
 		while (next != null) {
+			if (next instanceof WatchTask) {
+				history.add(((WatchTask) next).getMediaName());
+			}
+			
+			long executionStart = System.currentTimeMillis();
+			
 			Thread t = new Thread(next);
 			t.start();
 			t.join();
-			next = getNextTask();
+			
+			if (!(next instanceof AuthTask) ) {
+				long delta = System.currentTimeMillis() - executionStart;
+				executionTime += delta;
+			}
+			
+			next = getNextTask(); 
 		}
 		
-		long delta = System.currentTimeMillis() - start;
-		System.out.printf("Total time: %fh\n", (float) delta / 1000);
+		// when it runs out or when space is pressed, call the task selection menu
+		
+		System.out.printf("Total time: %fh\n", (float) executionTime / 3600);
+		
+		System.out.println("Execution history:");
+		for (String media : history) {
+			System.out.printf("- %s\n", media);
+		}
 	}
 }
