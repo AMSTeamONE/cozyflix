@@ -81,6 +81,9 @@ public class Streamming {
 				executionTime += delta;
 			}
 			
+			boolean autoplay;
+			MediaType mt = MediaType.MOVIE;
+			
 			System.out.print("----------\n1) Proceed\n2) Add task\n3)Quit\n>> ");
 			switch (UserInput.askInt()) {
 			case 1:
@@ -93,10 +96,10 @@ public class Streamming {
 					break;
 				}
 				case 2: {
-					boolean autoplay = UserInput.askBoolean("Autoplay [y/N]: ");
+					System.out.print("Autoplay [y/N]: ");
+					autoplay = UserInput.askBoolean();
 					
 					System.out.print("Media type: 1) Movie\n2) Series\n>> ");
-					MediaType mt = MediaType.MOVIE;
 					switch (UserInput.askInt()) {
 					case 2: {
 						mt = MediaType.SERIES;
@@ -109,7 +112,8 @@ public class Streamming {
 					
 					Task task = new WatchTask(UserInput.ask("Media"), (long) UserInput.askInt("Duration"), autoplay, mt);
 					
-					if (UserInput.askBoolean("Would you like to add a custom priority? [y/N] "))
+					System.out.print("Would you like to add a custom priority? [y/N] ");
+					if (UserInput.askBoolean())
 						task.setPriority(UserInput.askInt("Custom priority: "));
 					
 					addTask(task);

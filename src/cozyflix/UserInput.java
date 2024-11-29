@@ -39,8 +39,7 @@ public final class UserInput {
     	return scanner.nextInt();
     }
     
-    public static boolean askBoolean(String field) {
-    	System.out.printf("%s: ", field);
+    public static boolean askBoolean() {
     	return scanner.nextLine().toLowerCase().equals("y");
     }
     

@@ -12,6 +12,7 @@ public class AuthTask extends Task {
 
 	@Override
 	public void run() {
+		System.out.println("Login:");
 		String email = UserInput.askEmail();
 		String password = UserInput.askPassword();
 		
