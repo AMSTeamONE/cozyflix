@@ -12,6 +12,15 @@ public class WatchTask extends Task {
 	private boolean autoplay;
 	private MediaType type;
 
+	public WatchTask(String mediaName, long duration, boolean autoplay, MediaType type) {
+		super();
+		this.mediaName = mediaName;
+		this.duration = duration;
+		this.autoplay = autoplay;
+		this.type = type;
+		episodes = 0;
+	}
+	
 	public WatchTask(String mediaName, long duration, boolean autoplay, MediaType type, short episodes) {
 		super();
 		this.mediaName = mediaName;
