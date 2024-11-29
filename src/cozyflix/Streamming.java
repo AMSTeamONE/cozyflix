@@ -95,20 +95,18 @@ public class Streamming {
 					};
 					
 					media = UserInput.ask("Media");
-					Thread.sleep(5);
-					switch (media) {
-					default:
-						Task task = new WatchTask(media, duration, autoplay, mt, episodes);
-						addTask(task);
-					}
+					
+					addTask(new WatchTask(media, duration, autoplay, mt, episodes));
 					
 					break;
 				case 3:
 					media = UserInput.ask("Media");
-				default: {
+					addTask(new DownloadTask(media));
+					break;
+					
+				default: 
 					System.out.println("Invalid task choice");
 					break;
-				}
 				}
 				break;
 			}
