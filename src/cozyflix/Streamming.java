@@ -6,25 +6,6 @@ import cozyflix.WatchTask.MediaType;
 
 public class Streamming {
 
-    // Method to add tasks at specific positions
-    public void addTaskAt(Task task, String position) {
-        switch (position.toLowerCase()) {
-            case "start":
-                this.tasks.add(0, task);
-                break;
-            case "middle":
-                int middle = tasks.size() / 2;
-                this.tasks.add(middle, task);
-                break;
-            case "end":
-                this.tasks.add(task);
-                break;
-            default:
-                System.out.println("Invalid position! Task added to the end by default.");
-                this.tasks.add(task);
-        }
-    }
-
 	private ArrayList<Task> tasks;
 	private ArrayList<String> history;
 	private String email, password;
@@ -81,13 +62,16 @@ public class Streamming {
 				executionTime += delta;
 			}
 			
-			boolean autoplay;
+			boolean autoplay = false;
+			short episodes = 0;
 			MediaType mt = MediaType.MOVIE;
+			String media = "";
+			long duration = 120 * 60;
 			
-			System.out.print("----------\n1) Proceed\n2) Add task\n3)Quit\n>> ");
+			System.out.print("----------\n1) Proceed\n2) Add task\n3) Quit\n>> ");
 			switch (UserInput.askInt()) {
 			case 1:
-				continue;
+				break;
 			case 2: {
 				System.out.print("----------\n1) Authentication\n2) Add to watchlist\n3) Download\n>> ");
 				switch (UserInput.askInt()) {
@@ -95,30 +79,32 @@ public class Streamming {
 					addTask(new AuthTask(this));
 					break;
 				}
-				case 2: {
-					System.out.print("Autoplay [y/N]: ");
-					autoplay = UserInput.askBoolean();
-					
-					System.out.print("Media type: 1) Movie\n2) Series\n>> ");
+				case 2:
+					System.out.print("Media type:\n1) Movie\n2) Series\n>> ");
 					switch (UserInput.askInt()) {
-					case 2: {
-						mt = MediaType.SERIES;
+					case 1:
 						break;
-					}
-					default: {
+					case 2: 
+						mt = MediaType.SERIES;
+						autoplay = true;
+						episodes = 3;
+						duration = 30;
+						break;
+					default: 
 						System.out.println("Invalid media choice. Defaulting to movie.");
-					}
 					};
 					
-					Task task = new WatchTask(UserInput.ask("Media"), (long) UserInput.askInt("Duration"), autoplay, mt);
+					media = UserInput.ask("Media");
+					Thread.sleep(5);
+					switch (media) {
+					default:
+						Task task = new WatchTask(media, duration, autoplay, mt, episodes);
+						addTask(task);
+					}
 					
-					System.out.print("Would you like to add a custom priority? [y/N] ");
-					if (UserInput.askBoolean())
-						task.setPriority(UserInput.askInt("Custom priority: "));
-					
-					addTask(task);
 					break;
-				}
+				case 3:
+					media = UserInput.ask("Media");
 				default: {
 					System.out.println("Invalid task choice");
 					break;
@@ -136,9 +122,6 @@ public class Streamming {
 			}
 			
 			next = getNextTask();
-			if (next == null || UserInput.callMenuActive()) {
-				
-			}
 		}
 		
 		System.out.printf("Total time: %.2fh\n", (float) executionTime / 3600);

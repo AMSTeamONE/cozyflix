@@ -31,12 +31,12 @@ public final class UserInput {
     }
     
     public static int askInt() {
-    	return scanner.nextInt();
+    	return Integer.parseInt(scanner.nextLine());
     }
     
     public static int askInt(String field) {
     	System.out.printf("%s: ", field);
-    	return scanner.nextInt();
+    	return Integer.parseInt(scanner.nextLine());
     }
     
     public static boolean askBoolean() {
